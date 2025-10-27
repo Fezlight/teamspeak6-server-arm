@@ -47,3 +47,8 @@ jobs:
           echo "Création du tag local : $tag"
           git tag "$tag"
           git push origin "$tag"
+      - name: Create GitHub release
+        if: steps.compare.outputs.new_release == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.external.outputs.latest }}
