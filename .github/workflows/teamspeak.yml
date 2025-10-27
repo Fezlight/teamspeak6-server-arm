@@ -1,9 +1,9 @@
 name: Teamspeak ARM Build
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types:
+      - created
 
 jobs:
   docker-build:
