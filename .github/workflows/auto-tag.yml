@@ -1,0 +1,43 @@
+name: Teamspeak Polling and auto-tag
+
+on:
+  schedule:
+    - cron: '0 8 */1 * *'
+  workflow_dispatch:
+
+jobs:
+  check_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch release from Teamspeak Github
+        id: external
+        run: |
+          repo="teamspeak/teamspeak6-server"
+          latest_tag=$(curl -s  https://api.github.com/repos/$repos/releases/latest | jq -r '.tag_name' 2>/dev/null || echo "none")
+          echo "latest=$latest" >> $GITHUB_OUTPUT
+          echo "Last Teamspeak release : $latest"
+      - name: Get last synced tag
+        id: local
+        run: |
+          latest=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
+          echo "latest=$latest" >> $GITHUB_OUTPUT
+          echo "Latest local release : $latest"
+      - name: Check if new release exists
+        id: compare
+        run: |
+          latest="${{ steps.external.outputs.latest }}"
+          last="${{ steps.local.outputs.latest }}"
+          if [ "$latest" != "none" ] && [ "$latest" != "$last" ]; then
+            echo "new_release=true" >> $GITHUB_OUTPUT
+          else
+            echo "new_release=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Create tag for new external release
+        if: steps.compare.outputs.new_release == 'true'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          tag="${{ steps.release.outputs.latest }}"
+          echo "Création du tag local : $tag"
+          git tag "$tag"
+          git push origin "$tag"

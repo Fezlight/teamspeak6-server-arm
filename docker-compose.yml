@@ -1,0 +1,12 @@
+services:
+  teamspeak:
+    image: fezlight/teamspeak6-server-arm:latest
+    restart: unless-stopped
+    ports:
+      - "9987:9987/udp"    # Voice
+      - "30033:30033/tcp"  # File transfer
+      - "10080:10080/tcp"  # Web query (optional)
+    volumes:
+      - ./data:/data       # full access to server files & database
+    environment:
+      - TSSERVER_LICENSE_ACCEPTED=accept
