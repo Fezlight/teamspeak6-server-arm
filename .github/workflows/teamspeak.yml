@@ -15,6 +15,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Fetch version
+        id: fetch
+        run: |
+          latest=$(echo ${{ github.ref_name }} | awk -Fv '{ print $2 }')
+          echo "latest=$latest" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -36,12 +41,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           build-args: |
-            VERSION=${{ github.ref }}
+            VERSION=${{ github.ref_name }}
           context: .
           file: Dockerfile
           push: true
           platforms: linux/arm64
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:latest
-            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:${{ github.ref }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKERHUB_PROJECT_NAME }}:${{ steps.fetch.outputs.latest }}
           cache-from: type=local,src=/tmp/.buildx-cache
