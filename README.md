@@ -1,7 +1,7 @@
 # TeamSpeak 6 Server (x86-64) for ARM
 This is a fork of https://codeberg.org/Indogermane/teamspeak6-server-arm. Thanks to him.
 
-The idea here is to auto-update image based on Official Teamspeak repository.
+The goal here is to auto-update image based on Official Teamspeak repository.
 
 Run the official TeamSpeak 6 x86-64 server binary on 64-bit ARM hardware (Raspberry Pi 4, Apple Silicon, cloud ARM instances, …) using a minimal Debian-based Docker image and Box64 emulation.
 
