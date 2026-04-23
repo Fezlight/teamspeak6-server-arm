@@ -11,7 +11,7 @@ RUN apt-get update && \
 
 # Download and extract TeamSpeak server
 RUN wget "https://github.com/teamspeak/teamspeak6-server/releases/download/$VERSION/teamspeak6-server-linux-arm64.tar.xz" -O ts.tar.xz && \
-      tar -xJf ts.tar.xz --strip-components=1 && \
+      tar -xJf ts.tar.xz && \
       rm ts.tar.xz && \
       chmod +x tsserver
 
