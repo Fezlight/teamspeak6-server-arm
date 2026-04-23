@@ -5,7 +5,7 @@ WORKDIR /opt/teamspeak
 ARG VERSION=v6.0.0-beta6
 
 RUN apt-get update && \
-      apt-get install -y --no-install-recommends ca-certificates wget gnupg libatomic1 && \
+      apt-get install -y --no-install-recommends ca-certificates wget gnupg xz-utils libatomic1 && \
       apt-get update && \
       rm -rf /var/lib/apt/lists/*
 
